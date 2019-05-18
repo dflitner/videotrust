@@ -1,0 +1,5 @@
+name = Contextual Filter OR
+description = Forces OR in a contextual filter for Views
+core = 7.x
+package = Section 108
+files[] = confilter.views.inc

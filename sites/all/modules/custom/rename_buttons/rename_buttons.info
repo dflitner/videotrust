@@ -1,0 +1,4 @@
+name = Rename Buttons
+description = Changes button label text for certain buttons
+core = 7.x
+package = Section 108

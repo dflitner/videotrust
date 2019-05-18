@@ -1,0 +1,9 @@
+<?php
+/**
+ * Implements hook_form_alter().
+*/
+function rename_buttons_form_alter(&$form, $form_state, $form_id) {
+  if (isset($form['#node']) && $form_id == 'video_file' . '_node_form') {
+    $form['actions']['submit']['#value'] = t('Upload');
+  }
+}

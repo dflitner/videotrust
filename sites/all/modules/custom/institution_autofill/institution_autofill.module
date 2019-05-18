@@ -1,0 +1,9 @@
+<?php
+
+function institution_autofill_form_record_node_form_alter(&$form, &$form_state, $form_id) {
+
+  
+  $form['field_institution']['#type'] = 'hidden';
+
+
+}

@@ -1,0 +1,4 @@
+name = Institution Autofill
+description = Automatically adds author's institution to a record.
+core = 7.x
+package = Section 108

@@ -1,0 +1,17 @@
+name = User displays
+core = 7.x
+package = Section 108
+version = 7.x-2.1
+project = user_displays
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = menu
+dependencies[] = user_setup
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[menu_links][] = user-menu_log-in:user/login
+features[views_view][] = admin_users
+features[views_view][] = user_comments
+features[views_view][] = user_lists
+features_exclude[menu_custom][user-menu] = user-menu

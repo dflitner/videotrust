@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Record lists feature.
+ */
+
+include_once 'record_lists.features.inc';

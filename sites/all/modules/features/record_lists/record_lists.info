@@ -1,0 +1,12 @@
+name = Record lists
+core = 7.x
+package = Section 108
+version = 7.x-2.2
+project = record_lists
+dependencies[] = ctools
+dependencies[] = record
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = all_records
+features[views_view][] = latest

@@ -1,0 +1,17 @@
+name = Record export
+core = 7.x
+package = Section 108
+version = 7.x-3.0
+project = record_export
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = menu
+dependencies[] = record
+dependencies[] = searches
+dependencies[] = views
+dependencies[] = views_data_export
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[menu_links][] = main-menu_searches-for-export:searches
+features[views_view][] = export_records
+features_exclude[menu_custom][main-menu] = main-menu

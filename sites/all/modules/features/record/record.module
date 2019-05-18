@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Record feature.
+ */
+
+include_once 'record.features.inc';

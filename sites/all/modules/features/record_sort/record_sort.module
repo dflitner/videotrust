@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Record sort feature.
+ */
+
+include_once 'record_sort.features.inc';

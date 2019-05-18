@@ -1,0 +1,32 @@
+.views-data-export-doc-attach,
+.views-data-export-csv-attach,
+.views-data-export-txt-attach,
+.views-data-export-xls-attach,
+.views-data-export-xml-attach {
+  width: 36px;
+  height: 14px;
+  text-indent: -1000px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  outline: none;
+}
+
+.views-data-export-doc-attach {
+  background-image: url(images/doc.png);
+}
+
+.views-data-export-csv-attach {
+  background-image: url(images/csv.png);
+}
+
+.views-data-export-txt-attach {
+  background-image: url(images/txt.png);
+}
+
+.views-data-export-xls-attach {
+  background-image: url(images/xls.png);
+}
+
+.views-data-export-xml-attach {
+  background-image: url(images/xml.png);
+}

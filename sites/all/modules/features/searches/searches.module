@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Searches feature.
+ */
+
+include_once 'searches.features.inc';

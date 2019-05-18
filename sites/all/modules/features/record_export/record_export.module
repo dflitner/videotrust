@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Record export feature.
+ */
+
+include_once 'record_export.features.inc';

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Probation Workflow feature.
+ */
+
+include_once 'probation_workflow.features.inc';
