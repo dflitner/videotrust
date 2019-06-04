@@ -7,3 +7,8 @@ sites/*/private
 
 # Ignore derpy mac files
 .DS_Store
+*/.DS_Store
+
+# Ignore Acquia changes
+sites/sites.php
+sites/videotrust.dd
