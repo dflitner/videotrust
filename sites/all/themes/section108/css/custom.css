@@ -20,7 +20,7 @@ h2.title.comment-form {
  margin-right: 1em;
 }
 
-.button,
+/* .button, - not sure why this is here */
 .feed-icon {
  margin-bottom: 2em;
  position: absolute;
