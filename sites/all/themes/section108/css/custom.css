@@ -20,11 +20,10 @@ h2.title.comment-form {
  margin-right: 1em;
 }
 
-.button,
+/*.button,*/
 .feed-icon {
- margin-bottom: 2em;
  position: absolute;
- top: 4em;
+ top: 5em;
 }
 
 .feed-icon {
