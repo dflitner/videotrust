@@ -166,6 +166,10 @@ dd { margin-left: 0; }
     border-color: #ccc;
 }
 
+.view-id-resources td { min-width: 50%; }
+.view-id-resources .col-1 { border-right: #fff solid 2em; }
+.view-id-resources tr { border-bottom: #fff solid 2em; }
+
 /* article-related styles */
 figure[style="float:left"] { margin-left: 0; }
 figure[style="float:right"] { margin-right: 0; }
