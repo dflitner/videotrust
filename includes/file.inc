@@ -61,6 +61,26 @@ define('FILE_EXISTS_REPLACE', 1);
 define('FILE_EXISTS_ERROR', 2);
 
 /**
+ * Flag for determining if a file exists: Return TRUE if the file itself exists.
+ */
+define('FILE_CHECK_EXISTS_FILE', 0);
+
+/**
+ * Flag for determining if a file exists: Return TRUE if the file entity exists.
+ */
+define('FILE_CHECK_EXISTS_ENTITY', 1);
+
+/**
+ * Flag for determining if a file exists: Return TRUE if both the file and the file entity exist.
+ */
+define('FILE_CHECK_EXISTS_FILE_AND_ENTITY', 2);
+
+/**
+ * Flag for determining if a file exists: Return TRUE if either the file or the file entity exists.
+ */
+define('FILE_CHECK_EXISTS_FILE_OR_ENTITY', 3);
+
+/**
  * Indicates that the file is permanent and should not be deleted.
  *
  * Temporary files older than DRUPAL_MAXIMUM_TEMP_FILE_AGE will be removed
@@ -992,6 +1012,8 @@ function file_build_uri($path) {
  *   - FILE_EXISTS_RENAME - Append _{incrementing number} until the filename is
  *       unique.
  *   - FILE_EXISTS_ERROR - Do nothing and return FALSE.
+ * @param $check
+ *   Which file existence check to perform. Passed to drupal_file_exists().
  *
  * @return
  *   The destination filepath, or FALSE if the file already exists
@@ -1000,12 +1022,12 @@ function file_build_uri($path) {
  * @throws RuntimeException
  *   Thrown if the filename contains invalid UTF-8.
  */
-function file_destination($destination, $replace) {
+function file_destination($destination, $replace, $check = FILE_CHECK_EXISTS_FILE) {
   $basename = drupal_basename($destination);
   if (!drupal_validate_utf8($basename)) {
     throw new RuntimeException(sprintf("Invalid filename '%s'", $basename));
   }
-  if (file_exists($destination)) {
+  if (drupal_file_exists($destination, $check)) {
     switch ($replace) {
       case FILE_EXISTS_REPLACE:
         // Do nothing here, we want to overwrite the existing file.
@@ -1013,7 +1035,7 @@ function file_destination($destination, $replace) {
 
       case FILE_EXISTS_RENAME:
         $directory = drupal_dirname($destination);
-        $destination = file_create_filename($basename, $directory);
+        $destination = file_create_filename($basename, $directory, $check);
         break;
 
       case FILE_EXISTS_ERROR:
@@ -1228,6 +1250,8 @@ function file_unmunge_filename($filename) {
  *   String filename
  * @param $directory
  *   String containing the directory or parent URI.
+ * @param $check
+ *   Which file existence check to perform. Passed to drupal_file_exists().
  *
  * @return
  *   File path consisting of $directory and a unique filename based off
@@ -1237,7 +1261,7 @@ function file_unmunge_filename($filename) {
  *   Thrown if the $basename is not valid UTF-8 or another error occurs
  *   stripping control characters.
  */
-function file_create_filename($basename, $directory) {
+function file_create_filename($basename, $directory, $check = FILE_CHECK_EXISTS_FILE) {
   $original = $basename;
   // Strip control characters (ASCII value < 32). Though these are allowed in
   // some filesystems, not many applications handle them well.
@@ -1261,7 +1285,7 @@ function file_create_filename($basename, $directory) {
 
   $destination = $directory . $separator . $basename;
 
-  if (file_exists($destination)) {
+  if (drupal_file_exists($destination, $check)) {
     // Destination file already exists, generate an alternative.
     $pos = strrpos($basename, '.');
     if ($pos !== FALSE) {
@@ -1276,7 +1300,7 @@ function file_create_filename($basename, $directory) {
     $counter = 0;
     do {
       $destination = $directory . $separator . $name . '_' . $counter++ . $ext;
-    } while (file_exists($destination));
+    } while (drupal_file_exists($destination, $check));
   }
 
   return $destination;
@@ -1597,7 +1621,7 @@ function file_save_upload($form_field_name, $validators = array(), $destination 
     $destination .= '/';
   }
   try {
-    $file->destination = file_destination($destination . $file->filename, $replace);
+    $file->destination = file_destination($destination . $file->filename, $replace, FILE_CHECK_EXISTS_FILE_OR_ENTITY);
   }
   catch (RuntimeException $e) {
     drupal_set_message(t('The file %source could not be uploaded because the name is invalid.', array('%source' => $form_field_name)), 'error');
@@ -2381,6 +2405,52 @@ function drupal_unlink($uri, $context = NULL) {
   else {
     return unlink($uri);
   }
+}
+
+/**
+ * Checks whether a file exists.
+ *
+ * PHP's file_exists() only checks the file itself, not the Drupal entity.
+ *
+ * @param $uri
+ *   A URI or pathname.
+ * @param $check
+ *   One of:
+ *   - FILE_CHECK_EXISTS_FILE
+ *   - FILE_CHECK_EXISTS_ENTITY
+ *   - FILE_CHECK_EXISTS_FILE_AND_ENTITY
+ *   - FILE_CHECK_EXISTS_FILE_OR_ENTITY
+ *
+ * @return
+ *   Boolean TRUE if the file exists based on the requested check. FALSE
+ *   otherwise.
+ *
+ * @see file_exists()
+ * @ingroup php_wrappers
+ */
+function drupal_file_exists($uri, $check = FILE_CHECK_EXISTS_FILE) {
+  switch ($check) {
+    case FILE_CHECK_EXISTS_FILE:
+      return file_exists($uri);
+    case FILE_CHECK_EXISTS_ENTITY:
+      return _drupal_file_entity_exists($uri);
+    case FILE_CHECK_EXISTS_FILE_AND_ENTITY:
+      return file_exists($uri) && _drupal_file_entity_exists($uri);
+    case FILE_CHECK_EXISTS_FILE_OR_ENTITY:
+      return file_exists($uri) || _drupal_file_entity_exists($uri);
+  }
+}
+
+/**
+ * Helper function used by drupal_file_exists() to check if a file entity with the requested URI exists.
+ */
+function _drupal_file_entity_exists($uri) {
+  $query = new EntityFieldQuery();
+  return (bool) $query
+    ->entityCondition('entity_type', 'file')
+    ->propertyCondition('uri', $uri)
+    ->count()
+    ->execute();
 }
 
 /**
